@@ -1,0 +1,173 @@
+---
+title: "Portfolio 4"
+output: html_notebook
+---
+#### Mini-Exercise #1 
+
+Answer the questions about this peninsula example. Then do your own example from Latin America:
+1. Where in the world is the peninsula mapped above?
+Spain
+2. Is altitude a climate variable? How do the peninsula maps plotted above support your answer?
+Yes altitude is a climate variable. The peninsula exemplifies this because different alltitudes have unique climates. 
+3. Make a South America map with occurrence data for Jungia pauciflora & J. polita and:
+          a. Crop the map to allow discerning more detail in the two ranges
+          b. Also include altitude data or climate data, with occurrence points overlayed.
+```{r}
+SAmerica.worldalt <- crop(all.worldalt, extent(-75, -50, -30, -15))
+plot(SAmerica.worldalt[["alt"]])
+points(cbind(J_pauciflora$longitude, J_pauciflora$latitude), col="red", pch=20, cex=.8)
+points(cbind(J_paniculata$longitude, J_paniculata$latitude), col="blue", pch=20, cex=.8)
+points(cbind(J_polita$longitude, J_polita$latitude), col="white", pch=20, cex=.8)
+```
+          
+Let's build and combine your new skills in looking up species occurrence data with what we learned about mapping. 
+
+Going back to our peninsula, here are a bunch of species that are endemic to that area.
+
+Spergularia melanocaulos
+Petrocoptis grandiflora
+Spergula viscosa
+Minuartia cerastiifolia
+Minuartia recurva
+Petrocoptis hispanica
+Petrocoptis pyrenaica
+
+Choose any two, and do the following:
+```{r} 
+#1. Look up - are they accepted names or are they synonyms?
+library("rgbif")
+library("spocc")
+library("taxize")
+#Sometimes you know the species name, but you may be a little unsure of the spelling 
+results=gnr_resolve(names="Malus Pumila")
+head(results$matched_name)
+results=gnr_resolve(names="Solanum melongena")
+head(results$matched_name)
+#this is the accepted name for apple tree
+
+```
+
+```{r}
+name="Malus Pumila"  
+tsn=get_tsn(name, accepted=FALSE)
+tsn
+#The output suggests checking the itis database for the accepted name 
+lapply(tsn, itis_acceptname)
+#now we have the official taxon number associated with apples
+```
+
+```{r}
+#2. Look up the two plant taxa. Are they both angiosperms?
+#3. Angiosperm or otherwise, what plant family do they belong to?
+classification(c("Malus pumila"), db="itis")
+classification(c("Solanum melongena"), db="itis")
+#yes they are angiosperms
+```
+```{r}
+#4. For at least one genus, look up all the species in that genus.
+downstream("Solanum", downto="species", db="itis") 
+#here we see that there are many species in this genus
+```
+
+```{r}
+#5. For one species, look up to see if there are subspecies or other
+children("Malus pumila", db="col")
+#this shows us that there are  several infraspecies
+```
+
+```{r}
+#6. For both, search and download species occurrence data; prepare as a data-frame
+library(rgbif)
+pumila <- occ_search(scientificName="Malus pumila", limit=1000)
+#head(pumila)
+colnames(pumila$data)
+#pumila$data$genus
+#pumila$data$species
+unique(pumila$data$genus)
+unique(pumila$data$species)
+melongena <- occ_search(scientificName="Solanum melongena", limit=1000)
+#head(melongena)
+colnames(melongena$data)
+#melongena$data$genus
+#melongena$data$species
+unique(melongena$data$genus)
+unique(melongena$data$species)
+```
+```{r}
+#7. Clean-up the data-frame:remove occurrences with missing data and duplicates
+#Choose just three variables
+pumila.small <- subset(pumila$data, select=c("species", "decimalLatitude",
+"decimalLongitude"))
+#Rename the columns, make sure you're working with a dataframe
+colnames(pumila.small) <- c("species", "lat", "lon")
+pumila.small <- as.data.frame(pumila.small)
+head(pumila.small)
+tail(pumila.small)
+#There are often occurrences with missing values to remove 
+dim(pumila.small)
+pumila.small <- pumila.small[complete.cases(pumila.small),]
+dim(pumila.small)
+#Also there may be duplicates, the same plant or population observed twice
+#Or uploaded twice into the database
+pumila.u <- unique(pumila.small)
+dim(pumila.u)
+```
+
+9. Also map that species with climate variables on a world map or European map. 
+10. Returning to your results for #4 above, find another species with a range outside of the  peninsula. Download occurrence data and map on a world map. 
+11. Then re-map on an appropriately cropped map.
+
+ONE LAST THING
+12. Don't forget to identify the peninsula that we are working with! 
+```{r}
+#WORK WITH OCCURRENCE DATA, WORLDCLIM DATA AND MAPS
+#8. Map occurrence data with a climate variable for one species
+#We can get occurrence 
+appletree <- occ(q="Malus pumila", from="gbif", limit=100)
+appletree
+#getting data
+appletree.dat <- (appletree$gbif$data)
+head(appletree.dat)
+#slimming it down
+appletree.df <- occ2df(DawnRedwood)
+appletree.df
+#plotting occurence data on map with altitude
+plot(all.worldalt[["alt"]])
+points(appletree.df[,c("longitude", "latitude")], pch = 16, cex = 0.5, col = "red")
+#9 mapping with another climate variable with zoomed in range
+plot(all.worldalt[["alt"]], xlim=c(-25,50),ylim=c(35,71))
+points(appletree.df[,c("longitude", "latitude")], pch = 16, cex = 0.5, col = "red")
+```
+```{r}
+#10 and 11: doing the same thing with another species 
+melongena.small <- subset(melongena$data, select=c("species", "decimalLatitude",
+"decimalLongitude"))
+colnames(melongena.small) <- c("species", "lat", "lon")
+melongena.small <- as.data.frame(melongena.small)
+head(melongena.small)
+tail(melongena.small)
+#There are often occurrences with missing values to remove 
+dim(melongena.small)
+melongena.small <- melongena.small[complete.cases(melongena.small),]
+dim(melongena.small)
+melongena.u <- unique(melongena.small)
+dim(melongena.u)
+```
+```{r}
+#plotting eggplant
+eggplant <- occ(q="Solanum melongena", from="gbif", limit=100)
+eggplant
+#getting data
+eggplant.dat <- (eggplant$gbif$data)
+head(eggplant.dat)
+#slimming it down
+eggplant.df <- occ2df(eggplant)
+eggplant.df
+#plotting occurence data on map with altitude
+plot(all.worldalt[["alt"]])
+points(eggplant.df[,c("longitude", "latitude")], pch = 16, cex = 0.5, col = "red")
+#9 mapping with another climate variable with zoomed in range
+plot(all.worldalt[["alt"]], xlim=c(-25,50),ylim=c(35,71))
+points(eggplant.df[,c("longitude", "latitude")], pch = 16, cex = 0.5, col = "red")
+```
+
