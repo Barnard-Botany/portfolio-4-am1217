@@ -1,0 +1,58 @@
+---
+title: "4.1b"
+output: html_notebook
+---
+A. Based on six different recipes or menu items, create lists of at least 10 types of plants that are ingredients. For each, list the 10 most critical plant species that you would need to purchase as ingredients to prepare these foods. For simplicity, list the same number of plant species for each.
+```{r}
+getwd()
+setwd("/Users/Ana-MariaRodriguez/Desktop/Plants and profits/portfolio-4-am1217")
+
+library(labdsv)
+allrecipes<-read.csv("recipematrix.csv", row.names = 1)
+
+```
+
+```{r}
+class(allrecipes)
+```
+
+```{r}
+#we are going to make a tree using a list of the plants I use on a daily basis
+spp1 <- c("Allium cepa" , "Zingiber officinale", "Capsicum annuum" ,"Saccharum officinarum", "Glycine max", "Olea europaea", "Persea americana", "Zea mays", "Oryza sativa", "Capparis spinosa", "Solanum lycopersicum", "Spinacia oleracea", "Ocimum basilicum", "Coriandrum sativum")
+#shortcut to get the evolutionary relationship data
+urlA<-"http://datadryad.org/bitstream/handle/10255/dryad.8791/final_tree.tre?sequence=1"
+#plotting 
+allrecipes<-phylomatic(taxa=spp1, treeuri=urlA)
+plot(allrecipes)
+pdf_fn = "allrecipes.pdf"
+pdf(file=pdf_fn)
+
+```
+```{r}
+allrecipes <- as.matrix(allrecipes)
+dim(allrecipes)
+allrecipes 
+shannon <-diversity(allrecipes, index = "shannon")
+shannon
+simpson <-diversity(allrecipes, index = "simpson")
+simpson
+```
+```{r}
+data(allrecipes)
+names(allrecipes)
+head(allrecipes)
+```
+
+```{r}
+library(picante)
+
+```
+
+Phylogenize (revisiting skills from Digital Lab 3). Again, it's a good idea to write the tree you create as a file; you then can and should push back to GitHub as you submit your assignment. 
+
+Create six different annotations of the phylogeny, differing by showing the list-specific taxa. 
+Figure out both Shannon or Simpson diversity indices, and PD (Phylogenetic Diversity). Comment on how they compare. Figure out one additional analysis from today's lab, your choice. 
+
+
+
+
