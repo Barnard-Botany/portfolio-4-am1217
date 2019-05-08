@@ -1,0 +1,292 @@
+---
+title: "Final Project "
+output: html_notebook
+---
+In this notebook I will compare the flora of two contemporaries that we learned about in class namely, Jane Colden and David Hosack. 
+```{r}
+#We will begin by importing Jane Colden's Flora 
+getwd()
+setwd("/Users/Ana-MariaRodriguez/Desktop/Plants and profits/portfolio-4-am1217")
+read.csv("JaneColden.csv")
+Janecolden <- read.csv("JaneColden.csv")
+JC<-c("Alisma trivialis",
+"Sagittaria latifolia",
+"Arisaema triphyllum",
+"Lilium philadelphicum", 
+"Lilium superbum",
+"Erythronium americanum",
+"Smilacina racemosa",
+"Maianthemum canadense",
+"Medeola virginiana",
+"Trillium erectum",
+"Cypripedium calceolus",
+"Calopogon tuberosus",
+"Saururus cernuus",
+"Quercus alba",
+"Asarum canadense",
+"Aristolochia serpentaria",
+"Phytolacca decandra",
+"Anemone hepatica",
+"Caltha palustris",
+"Coptis trifolia",
+"Sanguinaria canadensis",
+"Dentaria diphylla",
+"Sarracenia purpurea",
+"Mitella diphylla",
+"Saxifraga virginiana",
+"Rubus ordoratus",
+"Baptisia tinctoria",
+"Lupinus perennis",
+"Apios americana",
+"Polygala senega",
+"Ludwigia palustris",
+"Staphylea trifolia",
+"Circaea quadrisulcata",
+"Aralia nudicaulis",
+"Cornus florida",
+"Kalmia angustifolia",
+"Lysimachia quadrifolia",
+"Steironema ciliatum",
+"Asclepias tuberosa",
+"Verbena hastata",
+"Monarda didyma",
+"Hedeoma pulegioides",
+"Pycnanthemum incanum", 
+"Collinsonia canadensis",
+"Verbascum blattaria",
+"Chelone glabra",
+"Mimulus ringens",
+"Veronicastrum virginicum",
+"Aureolaria virginica",
+"Melampyrum lineare",
+"Pedicularis canadensis",
+"Sambucus canadensis",
+"Lobelia cardinalis",
+"Solidago sqarrosa",
+"Gnaphalium obtusifolium",
+"Ambrosia artemisiifolia",
+"Rudbeckia triloba",
+"Helenium atumnale")
+JC
+tree_phylomatic_JC1 <- phylomatic(taxa = JC, get = 'POST')
+plot(tree_phylomatic_JC1, no.margin = TRUE, type="phylogram")
+newick_fn4 = "tree_phylomatic_JC1"
+write.tree(tree_phylomatic_JC1, file=newick_fn4)
+#repeating to get tree from Zanne2014
+tree_phylomatic_JC2 <- phylomatic(taxa = JC, storedtree ="zanne2014", get = 'POST')
+plot(tree_phylomatic_JC2, no.margin = TRUE, type="phylogram")
+newick_fn5 = "tree_phylomatic_JC2"
+write.tree(tree_phylomatic_JC2, file=newick_fn5)
+#here we created two phylogenies of Jane Colden's Flora. We created a newick tree, and we also created one using a database of evolutionary relationships stored in Zanne tree.
+plot(tree_phylomatic_JC1, type="unrooted")
+plot(tree_phylomatic_JC1, type="cladogram")
+pdf_fn = "tree_phylomatic_JC1.pdf"
+pdf(file=pdf_fn)
+plot(tree_phylomatic_JC1, type="unrooted", edge.width=5, edge.color="blue", lab4ut="axial")
+dev.off()
+cmdstr = paste("open ", pdf_fn, sep="")
+system(cmdstr)
+newick_fn = "tree_phylomatic_JC1"
+write.tree(tree_phylomatic_JC1, file=newick_fn)
+getwd()
+``` 
+```{r}
+#now we will do the same thing with Hosack's list, however because his list came from a photocopy of his flora and there are over 60 pages of it (It would take me 7 years to type into an excel sheet since I already tried uploading it onto globalnames.org to get a text of all the words on the list and it said there were only 2 when there are clearly over 600) I will randomly select some species, and also check for any overlap with Colden's list. 
+read.csv("DavidHosack.csv")
+Davidhosack <- read.csv("DavidHosack.csv")
+DH<-c("Abroma augustum",
+"Abrus precatorius",
+"Mimosa arborea L.",
+"Mimosa filicifolia Lmk",
+"Mimosa brachbyloba Vent.",
+"Mimosa illinoensis Mich.",
+"Mimosa discolor Andr.",
+"Mimosa botrycephala Vent.",
+"Mimosa faleata Willd.",
+"Mimosa obliqua Vent.",
+"Mimosa farnesiana L.",
+"Mimosa floribunda Vent.", 
+"Mimosa glauea L.",
+"Mimosa glaucescens Willd.",
+"Mimosa binervia Wend.",
+"Mimosa julibrissin Ait.",
+"Mimosa iatronum L.",
+"Mimosa lebbek L.",
+"Mimosa pennata L.",
+"Mimosa pulcherrina Willd.",
+"Mimosa speciosa Willd.",
+"Mimosa suaveolens sm. ",
+"Mimosa vera Willd.",
+"Mimosa nilotica L.",
+"Acalypha carolinia Mich.",
+"Acalypha virginica L.",
+"Acanthus mollis L. ",
+"Acanthus spinosus L.",
+"Acer dasycarpum Ehrt.",
+"Aralia nudicaulis",
+"Anemone hepatica ",
+"Asarum canadense ",
+"Betula vulgaris ",
+"Calendula officinalis",
+"Cornus florida",
+"Circaea alpina ",
+"Collinsonia canadensis",
+"Convolvulus batatas",
+"Chelone formosa",
+"Chelone glabra", 
+"Gnaphalium obtusifolium",
+"Helenium autumnale",
+"Monarda didyma",
+"Kalmia angustifolia",
+"Lilium philadelphicum", 
+"Lilium superbum",
+"Lunaria annus",
+"Lysimachia quadrifolia", 
+"Medeola virginica",
+"Mimulus ringens",
+"Melanthium virginicum",
+"Lobelia cardinalis",
+"Polygala senega",
+"Prunus avium",
+"Quercus alba",
+"Rosa alba",
+"Rubus odoratus",
+"Rudbeckia perfoliata",
+"Sagittaria latifolia",
+"Trillium erectum",
+"Saxifraga virgiana",
+"Zanthoxylum americanum", 
+"Viola canadensis",
+"Veronica virginica",
+"Verbascum blattarium", 
+"Zea mays")
+DH
+tree_phylomatic_DH1 <- phylomatic(taxa = DH, get = 'POST')
+plot(tree_phylomatic_DH1, no.margin = TRUE, type="phylogram")
+newick_fn4 = "tree_phylomaticDH1"
+write.tree(tree_phylomatic_DH1, file=newick_fn4)
+#repeating to get tree from Zanne2014
+tree_phylomatic_DH2 <- phylomatic(taxa = DH, storedtree ="zanne2014", get = 'POST')
+plot(tree_phylomatic_DH2, no.margin = TRUE, type="phylogram")
+newick_fn5 = "tree_phylomatic_DH2"
+write.tree(tree_phylomatic_DH2, file=newick_fn5)
+#now I will plot and save them in different formats
+plot(tree_phylomatic_DH1, type="unrooted")
+plot(tree_phylomatic_DH1, type="cladogram")
+pdf_fn = "tree_phylomatic_DH1.pdf"
+pdf(file=pdf_fn)
+plot(tree_phylomatic_DH1, type="unrooted", edge.width=5, edge.color="blue", lab4ut="axial")
+dev.off()
+cmdstr = paste("open ", pdf_fn, sep="")
+system(cmdstr)
+newick_fn = "tree_phylomatic_DH1"
+write.tree(tree_phylomatic_DH1, file=newick_fn)
+getwd()
+```
+```{r}
+#Now that I have phylogenized both lists, I will put them into a matrix so that we can compare similarity and dissimilarities between the two. 
+library(labdsv)
+jcdh <- read.csv("JCDH.csv", row.names = 1)
+jcdh
+jcdh <- as.matrix(jcdh)
+dim(jcdh)
+class(jcdh)
+jcdh
+shannon <-diversity(jcdh, index = "shannon")
+shannon
+simpson <-diversity(jcdh, index = "simpson")
+simpson
+```
+
+The shannon diversity index is a statstical value that is used to measure diversity within a population. One important factor to keep in mind when evaluating shannon indices assume that all species are represented in a sample, and they are not randomly sampled. For the Jane Colden Flora, this assumption is true, however from Hosack's Flora, I wasn't able to get the entire list into an excel file meaning that the list was not randomly sampled and it is not a complete representation of the population. It should therefore be analyez "with a grain of salt." Nevertheless we can still look at both of these values to tell us some informatino about the two lists that we are comparing. The shannon index for Hosack's list is approximately 4.189 while Colden's list is approximately 4.094. What we can deduce from these values is that Hosack's list contains more diverity than Colden's, which is true in the sense that it simply had more species on it than did colden's. 
+The Simpson diversity index is a statistical value that is used to measure diversity within a population, but more specifically it takes into account both richness and evenness. This means that it measures both species abundance, and the proportion each species contribute to the whole community. We can see that these numbers are rather similar, differing only by 0.001. We can ascertain that this is due to the fact that abundance across both was always 1 because we didn't have an inventory of exactly how many specimens Colden or Hosack had collected. Nevertheless we can also deduce that both lists are not that diverse given the fact that although each species had the same abundance (of 1), each list was not very diverse in the sense that there were just not that many species on each list. This can also be confirmed by the phylogenies that we created, they both show that species in each list come from many different families, but there were only about 60-70 species in each list. 
+```{r}
+#in order to wrap up this project and do my mastery assignment, I will compute the Bray and Jaccard index to get an even better sense of the similarity and dissimilarity between the lists since the diversity indeces weren't as useful as I had originally hoped.
+library(labdsv)
+jcdh <- read.csv("JCDH.csv", row.names = 1)
+jcdh
+jcdh <- as.matrix(jcdh)
+dim(jcdh)
+class(jcdh)
+jcdh
+bray = vegdist(jcdh, "bray") 
+bray
+jaccard = vegdist(jcdh, "jaccard", binary=T)
+jaccard
+#The bray index is a dissimilarity index that is used to measure how similar or dissimlar a dataset is. We are able to do this with this list, becuase it has basically been turned into a presence/absence list, and it uses this formate to compute dissimilarity. The values range from 0-1, where 0 indicates that the lists are exactly the same and there is no dissimilarity, and as it approaches 1, the more dissimlar they are. Moreover, a value of 1 would indicate that these two lists have absolutley no species in common. A Bray value of 0.6349 shows that there is an intermediate level of dissimilarity between the two lists, thus they are averagely dissimilar, leaningn towarrds more dissimilar than similar. 
+#This brings us to the Jaccard distance index, which is a dissimilarity index that is used to measure similarity between the two lists. In the test, we obtained a value of 0.73, which indicates that the the lists are more disimilar than similar, which agrees with the previous value that was obstained. Overall with these 4 diversity indices that were obtained we can conclude 3 things Firstly, these two lists are not diverse in the sense that they physically don't contain a large amount of species. This was determined by Simpson's Index (limitation to this is that I wasn't able to transcribe Hosack's entire list). Secondly, the lists are diverse in the sense that their abundance; this was determined by the shannon index and finally, they are more dissimlar from eachother, as indicated by both Bray and Jaccard indices. 
+```
+
+```{r}
+#here I just started mapping rangemaps of the species on each lists because I like maps and I also was curious to see where else in the Western Hemishphere these plants could be found 
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(whiteoak_rangemap, col="green", add=T)
+#Whiteoak appears on both Colden and Hosack's listsm
+silverbirch_rangemap <- BIEN_ranges_load_species("Betula_pendula")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(silverbirch_rangemap, col="green", add=T)
+#silverbirch is on Hosack's list
+```
+```{r}
+pricklyash_rangemap <- BIEN_ranges_load_species("Zanthoxylum_americanum")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(pricklyash_rangemap, col="green", add=T)
+#pricklyash is on Hosack's list and was also my assigned plant 
+```
+
+```{r}
+#two rangemaps from Colden's list to see which one has the widest range (which species are farthest north and which are fathest South)
+commonsneezeweed_rangemap <- BIEN_ranges_load_species("Helenium_autumnale")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(commonsneezeweed_rangemap, col="green", add=T)
+
+senegasnakeroot_rangemap <- BIEN_ranges_load_species("Polygala_senega")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(senegasnakeroot_rangemap, col="green", add=T)
+
+cheloneglabra_rangemap <- BIEN_ranges_load_species("Chelone_glabra")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(cheloneglabra_rangemap, col="green", add=T)
+
+Maianthemumcanadense_rangemap <- BIEN_ranges_load_species("Maianthemum_canadense")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(Maianthemumcanadense_rangemap, col="green", add=T)
+
+calthapalustris_rangemap <- BIEN_ranges_load_species("Caltha_palustris")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(calthapalustris_rangemap, col="green", add=T)
+
+calthapalustris_rangemap <- BIEN_ranges_load_species("Caltha_palustris")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(calthapalustris_rangemap, col="green", add=T)
+
+Kalmiaangustifolia_rangemap <- BIEN_ranges_load_species("Kalmia_angustifolia")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(Kalmiaangustifolia_rangemap, col="green", add=T)
+
+Ambrosiaartemisiifolia_rangemap <- BIEN_ranges_load_species("Ambrosia_artemisiifolia")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(Ambrosiaartemisiifolia_rangemap, col="green", add=T)
+
+liliumsuperbum_rangemap <- BIEN_ranges_load_species("Lilium_superbum")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(liliumsuperbum_rangemap, col="green", add=T)
+
+liliumphiladelphicum_rangemap <- BIEN_ranges_load_species("Lilium_philadelphicum")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(liliumphiladelphicum_rangemap, col="green", add=T)
+
+prunusavium_rangemap <- BIEN_ranges_load_species("Prunus_avium")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(prunusavium_rangemap, col="green", add=T)
+
+zeamays_rangemap <- BIEN_ranges_load_species("Zea_mays")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(zeamays_rangemap, col="green", add=T)
+
+#From these rangemaps I learned that species from Hosack's and Colden's list have a wide longitudinal range and can be found all throughout the America's not just a New York. An interesting follow up question to this would be to map how these rangemaps have been if at all affected by climate change, especially agriculturally important crops like Zea Mays. 
+```
+
+
+
+

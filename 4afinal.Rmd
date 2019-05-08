@@ -1,0 +1,34 @@
+---
+title: "4.3a"
+output: html_notebook
+---
+```{r}
+getwd()
+setwd("/Users/Ana-MariaRodriguez/Desktop/Plants and profits/portfolio-4-am1217")
+zanthoxylum <- read.csv("names.csv")
+str(zanthoxylum)
+#1. How many hits are there in total? This shows that there are 631 total observations 
+#2. What is the oldest mention of the species? Who is the author, and where was the author working? The oldest hit on this list is from 1969, the Author is University of Kansas Museum of Natural History. 
+```
+
+```{r}
+lavendar <- read.csv("lavendar.csv")
+str(lavendar)
+#3. Do this again for a spcies of your choosing Here we see that there are a total of 227 hits in this database and there are 206 hits from before the year 1900 . The oldest hit comes from 1716 from Christoph von Hellswig in Leipzig, Germany. 
+```
+
+```{r}
+library(taxize)
+results=gnr_resolve(names="Zanthoxylum americanum")
+head(results$matched_name)
+results=gnr_resolve(names="Lavendula angustifolium")
+head(results$matched_name)
+```
+```{r}
+#repeating the same search with the other accepted name for lavendar, since zanthoxylum has no other accepted names. 
+lavendar2 <- read.csv("lavenderothername.csv")
+str(lavendar2)
+#What we see is that there are a total of 27 observations. This means that the synonyms for species name are being accounted for independently, which also means that the other data sets aren't complete. 
+```
+
+
